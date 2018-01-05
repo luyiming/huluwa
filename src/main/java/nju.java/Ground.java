@@ -7,7 +7,7 @@ import java.awt.*;
 
 public final class Ground extends JFrame {
 
-    private final int OFFSET = 30;
+    private final int OFFSET = 50;
 
     public Ground() {
         InitUI();

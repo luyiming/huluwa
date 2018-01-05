@@ -1,5 +1,7 @@
 package nju.java;
 
+import nju.java.creature.*;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
@@ -9,25 +11,21 @@ import javax.swing.JPanel;
 
 public class Field extends JPanel {
 
-    private final int OFFSET = 30;
-    private final int SPACE = 20;
+    private final int SPACE = 70;
+    private final int OFFSET = 50;
+    private final int ROW = 10;
+    private final int COL = 10;
 
-    private ArrayList tiles = new ArrayList();
-    private Player player;
+    private Huluwa[] huluwas;
+    private Minion[] minions;
+    private Scorpion xiezijing;
+    private Snake snake;
+    private YeYe yeye;
+    private Background background;
 
-    private int w = 0;
-    private int h = 0;
+    private Position[][] positions;
+
     private boolean completed = false;
-
-    private String level =
-            "..........\n" +
-                    "..........\n" +
-                    "..........\n" +
-                    "..........\n" +
-                    "..........\n" +
-                    "..........\n" +
-                    "..........\n" +
-                    "..........\n";
 
     public Field() {
 
@@ -37,47 +35,62 @@ public class Field extends JPanel {
     }
 
     public int getBoardWidth() {
-        return this.w;
+        return 750;
     }
 
     public int getBoardHeight() {
-        return this.h;
+        return 750;
     }
+
+    public boolean inSpace(int x, int y) {
+        if (x >= 0 && x < ROW && y >= 0 && y < COL)
+            return true;
+        else
+            return false;
+    }
+
+    public synchronized Position[][] getPositions() { return positions; }
+
+    public int convertPositionToX(Position position) { return position.getX() * SPACE + OFFSET; }
+
+    public int convertPositionToY(Position position) { return position.getY() * SPACE + OFFSET; }
 
     public final void initWorld() {
 
-        int x = OFFSET;
-        int y = OFFSET;
+        background = new Background(0, 0);
 
-        Tile a;
-
-
-        for (int i = 0; i < level.length(); i++) {
-
-            char item = level.charAt(i);
-
-            if (item == '\n') {
-                y += SPACE;
-                if (this.w < x) {
-                    this.w = x;
-                }
-
-                x = OFFSET;
-            } else if (item == '.') {
-                a = new Tile(x, y);
-                tiles.add(a);
-                x += SPACE;
-            } else if (item == '@') {
-                player = new Player(x, y, this);
-                x += SPACE;
-            } else if (item == ' ') {
-                x += SPACE;
+        positions = new Position[ROW][COL];
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                positions[i][j] = new Position(i, j);
             }
-
-            h = y;
         }
 
-        player = new Player(0+ OFFSET,0+OFFSET, this);
+        huluwas = new Huluwa[7];
+        for (int i = 0; i < huluwas.length; i++) {
+            huluwas[i] = new Huluwa(COLOR.values()[i], this);
+            huluwas[i].setPosition(positions[2][i]);
+            positions[2][i].setCreature(huluwas[i]);
+        }
+
+        yeye = new YeYe(this);
+        yeye.setPosition(positions[0][0]);
+        positions[0][0].setCreature(yeye);
+
+        minions = new Minion[7];
+        for (int i = 0; i < minions.length; i++) {
+            minions[i] = new Minion(this);
+            minions[i].setPosition(positions[7][i]);
+            positions[7][i].setCreature(minions[i]);
+        }
+
+        xiezijing = new Scorpion(this);
+        xiezijing.setPosition(positions[9][5]);
+        positions[9][5].setCreature(xiezijing);
+
+        snake = new Snake(this);
+        snake.setPosition(positions[9][4]);
+        positions[9][4].setCreature(snake);
 
     }
 
@@ -87,25 +100,29 @@ public class Field extends JPanel {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         ArrayList world = new ArrayList();
-        world.addAll(tiles);
 
-
-        world.add(player);
-
+        world.add(background);
+        world.add(yeye);
+        world.add(snake);
+        world.add(xiezijing);
+        for (Huluwa a : huluwas)
+            world.add(a);
+        for (Minion a : minions)
+            world.add(a);
 
         for (int i = 0; i < world.size(); i++) {
 
             Thing2D item = (Thing2D) world.get(i);
 
-            if (item instanceof Player) {
-                g.drawImage(item.getImage(), item.x() + 2, item.y() + 2, this);
+            if (item instanceof Creature) {
+                g.drawImage(item.getImage(), item.x(), item.y(), this);
             } else {
                 g.drawImage(item.getImage(), item.x(), item.y(), this);
             }
 
             if (completed) {
                 g.setColor(new Color(0, 0, 0));
-                g.drawString("Completed", 25, 20);
+                g.drawString("Completed", 100, 20);
             }
 
         }
@@ -126,36 +143,21 @@ public class Field extends JPanel {
                 return;
             }
 
-
             int key = e.getKeyCode();
-
-
             if (key == KeyEvent.VK_LEFT) {
-
-
-                player.move(-SPACE, 0);
-
+                yeye.move(-1, 0);
             } else if (key == KeyEvent.VK_RIGHT) {
-
-
-                player.move(SPACE, 0);
-
+                yeye.move(1, 0);
             } else if (key == KeyEvent.VK_UP) {
-
-
-                player.move(0, -SPACE);
-
+                yeye.move(0, -1);
             } else if (key == KeyEvent.VK_DOWN) {
-
-
-                player.move(0, SPACE);
-
+                yeye.move(0, 1);
             } else if (key == KeyEvent.VK_S) {
-
-                new Thread(player).start();
-
+                new Thread(yeye).start();
             } else if (key == KeyEvent.VK_R) {
                 restartLevel();
+            } else if (key == KeyEvent.VK_C) {
+                completed = true;
             }
 
             repaint();
@@ -165,7 +167,6 @@ public class Field extends JPanel {
 
     public void restartLevel() {
 
-        tiles.clear();
         initWorld();
         if (completed) {
             completed = false;

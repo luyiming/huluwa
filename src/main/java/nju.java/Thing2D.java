@@ -39,5 +39,11 @@ public class Thing2D {
         this.y = y;
     }
 
+    public int getWidth() {
+        return image.getWidth(null);
+    }
 
+    public int getHeight() {
+        return image.getHeight(null);
+    }
 } 
