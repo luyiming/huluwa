@@ -6,9 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class Minion extends Creature {
-    public Minion(Field field) {
-        super(field);
+public class Minion extends Monster {
+    public Minion(Field field, int speed, double bulletSpeed, double damage, int attackRange, int numOfBullets) {
+        super(field, speed, bulletSpeed, damage, attackRange, numOfBullets);
 
         URL loc = this.getClass().getClassLoader().getResource("hamajing.png");
         ImageIcon iia = new ImageIcon(loc);

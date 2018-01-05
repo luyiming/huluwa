@@ -6,9 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class Scorpion extends Creature {
-    public Scorpion(Field field) {
-        super(field);
+public class Scorpion extends Monster {
+    public Scorpion(Field field, int speed, double bulletSpeed, double damage, int attackRange, int numOfBullets) {
+        super(field, speed, bulletSpeed, damage, attackRange, numOfBullets);
 
         URL loc = this.getClass().getClassLoader().getResource("xiezijing.png");
         ImageIcon iia = new ImageIcon(loc);
