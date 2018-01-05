@@ -14,7 +14,7 @@ public class BulletsManager implements Runnable {
         this.field = field;
     }
 
-    public void addBullet(Bullet bullet) {
+    public synchronized void addBullet(Bullet bullet) {
         bullets.add(bullet);
         this.field.getRecordsManager().addRecord(RecordFactory.makeBulletCreateRecord(this.field.getRunningTime(), bullet.getId(), bullet.x(), bullet.y(), bullet.getAngle(), bullet.getSrc()));
     }

@@ -1,8 +1,10 @@
 package nju.zhenfa;
 
 import nju.Field;
-import nju.creature.Creature;
+import nju.creature.*;
+
+import java.util.ArrayList;
 
 public interface ZhenFa {
-    public void apply(Field field, Creature[] creatures);
+    void apply(Field field, ArrayList<? extends Creature> creatures);
 }

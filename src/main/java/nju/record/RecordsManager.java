@@ -27,7 +27,7 @@ public class RecordsManager {
 
     public boolean isEmpty() { return records.isEmpty(); }
 
-    public void addRecord(Record record) {
+    public synchronized void addRecord(Record record) {
         records.add(record);
         if (record.type == Record.RecordType.CREATE) {
             System.out.printf("%s created at (%d, %d)\n", record.creature.getClass().getSimpleName(), record.positionX, record.positionY);

@@ -3,6 +3,8 @@ package nju;
 import nju.creature.*;
 import nju.bullet.*;
 import nju.record.*;
+import nju.zhenfa.ChangSheZhen;
+import nju.zhenfa.FangYuanZhen;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -102,42 +104,43 @@ public class Field extends JPanel {
         }
 
         huluwas = new ArrayList<Huluwa>();
-        for (int i = 0; i < 7; i++) {
-            Huluwa huluwa = new Huluwa(COLOR.values()[i], this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN,
-                    Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet" + (i+1) + ".png");
-            huluwa.setPosition(positions[2][i]);
-            positions[2][i].setCreature(huluwa);
-            recordsManager.addRecord(RecordFactory.makeCreateRecord(huluwa.getId(), huluwa));
-            huluwas.add(huluwa);
-        }
+        huluwas.add(new Huluwa(COLOR.红, this, Creature.SPEED_HIGH, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_HIGH, Creature.ATTACK_RANGE_CLOSE, 2, "bullet1.png"));
+        huluwas.add(new Huluwa(COLOR.橙, this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_HIGH, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet2.png"));
+        huluwas.add(new Huluwa(COLOR.黄, this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_LOW, Creature.DAMAGE_HIGH, Creature.ATTACK_RANGE_FAR, 1, "bullet3.png"));
+        huluwas.add(new Huluwa(COLOR.绿, this, Creature.SPEED_HIGH, Creature.BULLET_SPEED_LOW, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 3, "bullet4.png"));
+        huluwas.add(new Huluwa(COLOR.青, this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet5.png"));
+        huluwas.add(new Huluwa(COLOR.蓝, this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_HIGH, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet6.png"));
+        huluwas.add(new Huluwa(COLOR.紫, this, Creature.SPEED_HIGH, Creature.BULLET_SPEED_HIGH, Creature.DAMAGE_LOW, Creature.ATTACK_RANGE_FAR, 3, "bullet7.png"));
+        new ChangSheZhen(1, 2).apply(this, huluwas);
 
-        yeye = new YeYe(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_LOW,
-                Creature.ATTACK_RANGE_FAR, 2, "bullet0.png");
-        yeye.setPosition(positions[0][0]);
-        positions[0][0].setCreature(yeye);
+        yeye = new YeYe(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_LOW, Creature.ATTACK_RANGE_FAR, 3, "bullet0.png");
+        yeye.setPosition(positions[1][1]);
+        positions[1][1].setCreature(yeye);
         recordsManager.addRecord(RecordFactory.makeCreateRecord(yeye.getId(), yeye));
 
         minions = new ArrayList<Minion>();
-        for (int i = 0; i < 5; i++) {
-            Minion minion = new Minion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN,
-                    Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
-            minion.setPosition(positions[7][i]);
-            positions[7][i].setCreature(minion);
-            recordsManager.addRecord(RecordFactory.makeCreateRecord(minion.getId(), minion));
-            minions.add(minion);
+        for (int i = 0; i < 4; i++) {
+            minions.add(new Minion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png"));
         }
+        for (int i = 0; i < 2; i++) {
+            minions.add(new Minion(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_HIGH, Creature.DAMAGE_LOW, Creature.ATTACK_RANGE_FAR, 1, "bullet8.png"));
+        }
+        minions.add(new Minion(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_HIGH, Creature.DAMAGE_LOW, Creature.ATTACK_RANGE_FAR, 2, "bullet8.png"));
+        minions.add(new Minion(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_LOW, Creature.ATTACK_RANGE_MEDIAN, 3, "bullet8.png"));
 
-        xiezijing = new Scorpion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN,
-                Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
-        xiezijing.setPosition(positions[9][5]);
-        positions[9][5].setCreature(xiezijing);
+        new FangYuanZhen(7, 4).apply(this, minions);
+
+        xiezijing = new Scorpion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_HIGH,
+                Creature.ATTACK_RANGE_MEDIAN, 2, "bullet8.png");
+        xiezijing.setPosition(positions[7][4]);
+        positions[7][4].setCreature(xiezijing);
         recordsManager.addRecord(RecordFactory.makeCreateRecord(xiezijing.getId(), xiezijing));
 
-        snake = new Snake(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN,
-                Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
+        snake = new Snake(this, Creature.SPEED_HIGH, Creature.BULLET_SPEED_HIGH, Creature.DAMAGE_LOW,
+                Creature.ATTACK_RANGE_FAR, 3, "bullet8.png");
         snake.setHealth(0.6);
-        snake.setPosition(positions[9][4]);
-        positions[9][4].setCreature(snake);
+        snake.setPosition(positions[8][4]);
+        positions[8][4].setCreature(snake);
         recordsManager.addRecord(RecordFactory.makeCreateRecord(snake.getId(), snake));
 
     }
@@ -184,15 +187,15 @@ public class Field extends JPanel {
                 scoreRecord();
             }
 
-            if (completed) {
+            if (completed && !replayMode) {
                 g.setColor(new Color(0, 0, 0));
                 g.setFont(new Font("Microsoft Yahei", Font.PLAIN, 20));
                 if (huluwaWin && minionWin) {
-                    g.drawString("平局", 300, 10);
+                    g.drawString("平局", 300, 85);
                 } else if (huluwaWin) {
-                    g.drawString("葫芦娃赢了", 300, 10);
+                    g.drawString("葫芦娃赢了", 300, 85);
                 } else if (minionWin) {
-                    g.drawString("蛇精赢了", 300, 10);
+                    g.drawString("蛇精赢了", 300, 85);
                 }
             }
 
