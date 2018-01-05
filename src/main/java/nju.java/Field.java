@@ -2,11 +2,11 @@ package nju.java;
 
 import nju.java.bullet.Bullet;
 import nju.java.bullet.BulletsManager;
-import nju.java.creature.*;
 import nju.java.record.Record;
 import nju.java.record.RecordFactory;
 import nju.java.record.RecordPlayer;
 import nju.java.record.RecordsManager;
+import nju.java.creature.*;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -209,11 +209,22 @@ public class Field extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
 
+            int key = e.getKeyCode();
+
+            if (key == KeyEvent.VK_Q) {
+                System.out.println("save");
+                Field.this.getRecordsManager().exportToFile("C:\\Users\\luyim\\Desktop\\sample.xml");
+            } else if (key == KeyEvent.VK_P) {
+                RecordPlayer recordPlayer = new RecordPlayer(Field.this);
+                Field.this.getRecordsManager().parse("C:\\Users\\luyim\\Desktop\\sample.xml", recordPlayer);
+                System.out.println("records size --- " + Field.this.getRecordsManager().getRecords().size());
+                new Thread(recordPlayer).start();
+            }
+
             if (completed) {
                 return;
             }
 
-            int key = e.getKeyCode();
             if (key == KeyEvent.VK_LEFT) {
                 yeye.move(-1, 0);
             } else if (key == KeyEvent.VK_RIGHT) {
@@ -238,16 +249,6 @@ public class Field extends JPanel {
                     thread.start();
             } else if (key == KeyEvent.VK_R) {
                 restartLevel();
-            } else if (key == KeyEvent.VK_C) {
-                completed = true;
-            } else if (key == KeyEvent.VK_X) {
-//                new RecordsManager().parse("D:\\Projects\\huluwa\\sample.xml");
-            } else if (key == KeyEvent.VK_P) {
-                RecordPlayer recordPlayer = new RecordPlayer(Field.this);
-                Field.this.getRecordsManager().parse("C:\\Users\\luyim\\Desktop\\sample.xml", recordPlayer);
-                System.out.println("records size --- " + Field.this.getRecordsManager().getRecords().size());
-                new Thread(recordPlayer).start();
-//                new RecordsManager().exportToFile("C:\\Users\\luyim\\Desktop\\sample.xml");
             }
 
             repaint();
@@ -286,7 +287,6 @@ public class Field extends JPanel {
                 thread.interrupt();
             }
             System.out.println("completed");
-            this.recordsManager.exportToFile("C:\\Users\\luyim\\Desktop\\sample.xml");
         }
     }
 
