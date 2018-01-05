@@ -85,28 +85,32 @@ public class Field extends JPanel {
 
         huluwas = new Huluwa[7];
         for (int i = 0; i < huluwas.length; i++) {
-            huluwas[i] = new Huluwa(COLOR.values()[i], this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1);
+            huluwas[i] = new Huluwa(COLOR.values()[i], this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN,
+                    Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet" + (i+1) + ".png");
             huluwas[i].setPosition(positions[2][i]);
             positions[2][i].setCreature(huluwas[i]);
         }
 
-        yeye = new YeYe(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_LOW, Creature.ATTACK_RANGE_FAR, 2);
-        yeye.setHealth(0.8);
+        yeye = new YeYe(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_LOW,
+                Creature.ATTACK_RANGE_FAR, 2, "bullet0.png");
         yeye.setPosition(positions[0][0]);
         positions[0][0].setCreature(yeye);
 
         minions = new Minion[7];
         for (int i = 0; i < minions.length; i++) {
-            minions[i] = new Minion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1);
+            minions[i] = new Minion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN,
+                    Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
             minions[i].setPosition(positions[7][i]);
             positions[7][i].setCreature(minions[i]);
         }
 
-        xiezijing = new Scorpion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1);
+        xiezijing = new Scorpion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN,
+                Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
         xiezijing.setPosition(positions[9][5]);
         positions[9][5].setCreature(xiezijing);
 
-        snake = new Snake(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1);
+        snake = new Snake(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN,
+                Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
         snake.setHealth(0.6);
         snake.setPosition(positions[9][4]);
         positions[9][4].setCreature(snake);

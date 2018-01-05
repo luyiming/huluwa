@@ -18,6 +18,8 @@ public abstract class Creature extends Thing2D implements Runnable {
     private int attackRange;
     private int numOfBullets;
 
+    private String bulletFilePath;
+
     public static final int SPEED_HIGH = 500;
     public static final int SPEED_MEDIAN = 700;
     public static final int SPEED_LOW = 1000;
@@ -30,11 +32,11 @@ public abstract class Creature extends Thing2D implements Runnable {
     public static final double DAMAGE_MEDIAN = 0.2;
     public static final double DAMAGE_LOW = 0.1;
 
-    public static final int ATTACK_RANGE_FAR = 4;
+    public static final int ATTACK_RANGE_FAR = 5;
     public static final int ATTACK_RANGE_MEDIAN = 3;
     public static final int ATTACK_RANGE_CLOSE = 2;
 
-    public Creature(Field field, int speed, double bulletSpeed, double damage, int attackRange, int numOfBullets) {
+    public Creature(Field field, int speed, double bulletSpeed, double damage, int attackRange, int numOfBullets, String bulletFilePath) {
         super(0, 0);
 
         this.field = field;
@@ -44,6 +46,7 @@ public abstract class Creature extends Thing2D implements Runnable {
         this.damage = damage;
         this.attackRange = attackRange;
         this.numOfBullets = numOfBullets;
+        this.bulletFilePath = bulletFilePath;
     }
 
     public double getHealth() {
@@ -114,7 +117,7 @@ public abstract class Creature extends Thing2D implements Runnable {
         }
     }
 
-    protected abstract boolean canAttack(Creature creature);
+    public abstract boolean canAttack(Creature creature);
 
     protected void doAttack() {
         int cnt = 0;
@@ -127,7 +130,7 @@ public abstract class Creature extends Thing2D implements Runnable {
                 int y = position.getY() + j;
                 if (this.field.inSpace(x, y) && this.field.getPositions()[x][y].hasCreature() && canAttack(this.field.getPositions()[x][y].getCreature())) {
                     this.field.getBulletsManager().addBullet(new Bullet(this.field.convertPositionToX(position), this.field.convertPositionToY(position),
-                            this.field.convertPositionToX(x), this.field.convertPositionToY(y), bulletSpeed, damage));
+                            this.field.convertPositionToX(x), this.field.convertPositionToY(y), bulletSpeed, damage, bulletFilePath, this));
                     cnt++;
                     if (cnt >= numOfBullets)
                         break out;

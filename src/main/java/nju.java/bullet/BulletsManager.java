@@ -33,7 +33,7 @@ public class BulletsManager implements Runnable {
             }
             int x = this.field.convertXtoPosition(bullet.x());
             int y = this.field.convertYtoPosition(bullet.y());
-            if (this.field.inSpace(x, y) && this.field.getPositions()[x][y].hasCreature()) {
+            if (this.field.inSpace(x, y) && this.field.getPositions()[x][y].hasCreature() && bullet.getCreature().canAttack(this.field.getPositions()[x][y].getCreature())) {
                 this.field.getPositions()[x][y].getCreature().hurt(bullet.getDamage());
                 bullets.remove(i);
 //                System.out.println("remove bullet");

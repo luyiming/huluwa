@@ -1,6 +1,7 @@
 package nju.java.bullet;
 
 import nju.java.Thing2D;
+import nju.java.creature.Creature;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -16,6 +17,7 @@ public class Bullet extends Thing2D {
     private double angle;
     private double speed;
     private double damage;
+    private Creature creature;
 
     public static final double SPEED_HIGH = 0.6;
     public static final double SPEED_MEDIAN = 0.4;
@@ -25,13 +27,14 @@ public class Bullet extends Thing2D {
     public static final double DAMAGE_MEDIAN = 0.2;
     public static final double DAMAGE_LOW = 0.1;
 
-    public Bullet(int fromX, int fromY, int toX, int toY, double speed, double damage) {
+    public Bullet(int fromX, int fromY, int toX, int toY, double speed, double damage, String bulletFilePath, Creature creature) {
         super(fromX, fromY);
 
         this.speed = speed;
         this.damage = damage;
+        this.creature = creature;
 
-        URL loc = this.getClass().getClassLoader().getResource("bullet.png");
+        URL loc = this.getClass().getClassLoader().getResource(bulletFilePath);
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
 
@@ -70,5 +73,9 @@ public class Bullet extends Thing2D {
 
     public double getDamage() {
         return damage;
+    }
+
+    public Creature getCreature() {
+        return creature;
     }
 }
