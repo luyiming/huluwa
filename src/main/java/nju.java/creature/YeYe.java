@@ -18,6 +18,11 @@ public class YeYe extends Creature {
     }
 
     @Override
+    public String getImagePath() {
+        return "yeye.png";
+    }
+
+    @Override
     public boolean canAttack(Creature creature) {
         return creature instanceof Monster;
     }

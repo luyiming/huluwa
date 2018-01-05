@@ -11,6 +11,18 @@ public class RecordFactory {
         record.creature = creature;
         record.positionX = creature.getPosition().getX();
         record.positionY = creature.getPosition().getY();
+        record.src = creature.getImagePath();
+        return record;
+    }
+
+    public static Record makeCreateRecord(int id, Creature creature, int positionX, int positionY) {
+        Record record = new Record();
+        record.type = Record.RecordType.CREATE;
+        record.id = id;
+        record.creature = creature;
+        record.positionX = positionX;
+        record.positionY = positionY;
+        record.src = creature.getImagePath();
         return record;
     }
     public static Record makeMoveRecord(long time, int id, int x, int y) {

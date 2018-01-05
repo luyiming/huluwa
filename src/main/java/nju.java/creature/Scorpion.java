@@ -15,4 +15,9 @@ public class Scorpion extends Monster {
         Image image = iia.getImage();
         this.setImage(image);
     }
+
+    @Override
+    public String getImagePath() {
+        return "xiezijing.png";
+    }
 }

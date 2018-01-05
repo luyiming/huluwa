@@ -6,9 +6,12 @@ import nju.java.Position;
 import nju.java.bullet.Bullet;
 import nju.java.record.RecordFactory;
 
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 import java.util.Random;
 
-public abstract class Creature extends Thing2D implements Runnable {
+public class Creature extends Thing2D implements Runnable {
     private Field field;
     private Position position;
 
@@ -48,6 +51,20 @@ public abstract class Creature extends Thing2D implements Runnable {
         this.attackRange = attackRange;
         this.numOfBullets = numOfBullets;
         this.bulletFilePath = bulletFilePath;
+    }
+
+    public Creature(String src) {
+        super(0, 0);
+
+        this.health = 1.0;
+        URL loc = this.getClass().getClassLoader().getResource(src);
+        ImageIcon iia = new ImageIcon(loc);
+        Image image = iia.getImage();
+        this.setImage(image);
+    }
+
+    public String getImagePath() {
+        return null;
     }
 
     public double getHealth() {
@@ -124,7 +141,9 @@ public abstract class Creature extends Thing2D implements Runnable {
         }
     }
 
-    public abstract boolean canAttack(Creature creature);
+    public boolean canAttack(Creature creature) {
+        return true;
+    }
 
     protected void doAttack() {
         int cnt = 0;

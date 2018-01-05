@@ -15,4 +15,9 @@ public class Snake extends Monster {
         Image image = iia.getImage();
         this.setImage(image);
     }
+
+    @Override
+    public String getImagePath() {
+        return "shejing1.png";
+    }
 }

@@ -56,7 +56,11 @@ public class Thing2D {
         return uid;
     }
 
+    public void setId(int id) {
+        uid = id;
+    }
+
     public static void resetId() {
-        id = 0;
+        id = 1;
     }
 } 

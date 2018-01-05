@@ -3,7 +3,9 @@ package nju.java;
 import nju.java.bullet.Bullet;
 import nju.java.bullet.BulletsManager;
 import nju.java.creature.*;
+import nju.java.record.Record;
 import nju.java.record.RecordFactory;
+import nju.java.record.RecordPlayer;
 import nju.java.record.RecordsManager;
 
 import java.awt.Color;
@@ -40,6 +42,9 @@ public class Field extends JPanel {
     private Board board;
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
+
+    private ArrayList<Creature> replayCreatures;
+    private ArrayList<Bullet> replayBullets;
 
     public Field(Board board) {
         this.board = board;
@@ -143,15 +148,20 @@ public class Field extends JPanel {
         ArrayList world = new ArrayList();
 
         world.add(background);
-        world.add(yeye);
-        world.add(snake);
-        world.add(xiezijing);
-        for (Huluwa a : huluwas)
-            world.add(a);
-        for (Minion a : minions)
-            world.add(a);
-        for (Bullet bullet: bulletsManager.getBullets())
-            world.add(bullet);
+        if (replayMode == true) {
+            world.addAll(this.replayCreatures);
+            world.addAll(this.replayBullets);
+        } else {
+            world.add(yeye);
+            world.add(snake);
+            world.add(xiezijing);
+            for (Huluwa a : huluwas)
+                world.add(a);
+            for (Minion a : minions)
+                world.add(a);
+            for (Bullet bullet: bulletsManager.getBullets())
+                world.add(bullet);
+        }
 
         for (int i = 0; i < world.size(); i++) {
 
@@ -232,7 +242,11 @@ public class Field extends JPanel {
                 completed = true;
             } else if (key == KeyEvent.VK_X) {
 //                new RecordsManager().parse("D:\\Projects\\huluwa\\sample.xml");
-            } else if (key == KeyEvent.VK_O) {
+            } else if (key == KeyEvent.VK_P) {
+                RecordPlayer recordPlayer = new RecordPlayer(Field.this);
+                Field.this.getRecordsManager().parse("C:\\Users\\luyim\\Desktop\\sample.xml", recordPlayer);
+                System.out.println("records size --- " + Field.this.getRecordsManager().getRecords().size());
+                new Thread(recordPlayer).start();
 //                new RecordsManager().exportToFile("C:\\Users\\luyim\\Desktop\\sample.xml");
             }
 
@@ -291,4 +305,13 @@ public class Field extends JPanel {
             completed = false;
         }
     }
+
+    private boolean replayMode = false;
+
+    public void setReplayThings(ArrayList<Creature> creatures, ArrayList<Bullet> bullets) {
+        this.replayBullets = bullets;
+        this.replayCreatures = creatures;
+        this.replayMode = true;
+    }
+
 }

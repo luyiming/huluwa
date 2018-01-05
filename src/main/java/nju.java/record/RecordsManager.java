@@ -4,6 +4,9 @@ import java.util.*;
 import java.io.*;
 
 import nju.java.Field;
+import nju.java.Position;
+import nju.java.Thing2D;
+import nju.java.creature.Creature;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import org.xml.sax.SAXException;
@@ -41,18 +44,79 @@ public class RecordsManager {
         }
     }
 
-    public void parse(String fileName) {
+    public void parse(String fileName, RecordPlayer player) {
+        records.clear();
+        Thing2D.resetId();
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document document = db.parse(fileName);
 
             NodeList recordsXML = document.getElementsByTagName("record");
-            System.out.println(recordsXML.getLength());
+            System.out.printf("get records: %d\n", recordsXML.getLength());
             for (int i = 0; i < recordsXML.getLength(); i++) {
                 Node record = recordsXML.item(i);
-                System.out.println(record.getNodeName());
-                System.out.println(record.getAttributes().getNamedItem("type").getNodeValue());
+                String type = record.getAttributes().getNamedItem("type").getNodeValue();
+                switch (Record.RecordType.valueOf(type)) {
+                    case CREATE: {
+                        String creature = record.getAttributes().getNamedItem("creature").getNodeValue();
+                        String id = record.getAttributes().getNamedItem("id").getNodeValue();
+                        String src = record.getAttributes().getNamedItem("src").getNodeValue();
+                        int positionX = Integer.parseInt(record.getAttributes().getNamedItem("positionX").getNodeValue());
+                        int positionY = Integer.parseInt(record.getAttributes().getNamedItem("positionY").getNodeValue());
+                        Creature creature1 = new Creature(src);
+                        creature1.setX(this.field.convertPositionToX(positionX));
+                        creature1.setY(this.field.convertPositionToY(positionY));
+                        player.addCreature(creature1, Integer.parseInt(id));
+                        addRecord(RecordFactory.makeCreateRecord(creature1.getId(), creature1, positionX, positionY));
+                        break;
+                    }
+                    case MOVE: {
+                        int id = Integer.parseInt(record.getAttributes().getNamedItem("id").getNodeValue());
+                        long time = Long.parseLong(record.getAttributes().getNamedItem("time").getNodeValue());
+                        int x = Integer.parseInt(record.getAttributes().getNamedItem("x").getNodeValue());
+                        int y = Integer.parseInt(record.getAttributes().getNamedItem("y").getNodeValue());
+                        addRecord(RecordFactory.makeMoveRecord(time, id, x, y));
+                        break;
+                    }
+                    case HURT: {
+                        int id = Integer.parseInt(record.getAttributes().getNamedItem("id").getNodeValue());
+                        long time = Long.parseLong(record.getAttributes().getNamedItem("time").getNodeValue());
+                        double health = Double.parseDouble(record.getAttributes().getNamedItem("health").getNodeValue());
+                        addRecord(RecordFactory.makeHurtRecord(time, id, health));
+                        break;
+                    }
+                    case DEAD: {
+                        int id = Integer.parseInt(record.getAttributes().getNamedItem("id").getNodeValue());
+                        long time = Long.parseLong(record.getAttributes().getNamedItem("time").getNodeValue());
+                        addRecord(RecordFactory.makeDeadRecord(time, id));
+                        break;
+                    }
+                    case BULLET_CREATE: {
+                        int id = Integer.parseInt(record.getAttributes().getNamedItem("id").getNodeValue());
+                        long time = Long.parseLong(record.getAttributes().getNamedItem("time").getNodeValue());
+                        int x = Integer.parseInt(record.getAttributes().getNamedItem("x").getNodeValue());
+                        int y = Integer.parseInt(record.getAttributes().getNamedItem("y").getNodeValue());
+                        double angle = Double.parseDouble(record.getAttributes().getNamedItem("angle").getNodeValue());
+                        String src = record.getAttributes().getNamedItem("src").getNodeValue();
+                        addRecord(RecordFactory.makeBulletCreateRecord(time, id, x, y, angle, src));
+                        break;
+                    }
+                    case BULLET_MOVE: {
+                        int id = Integer.parseInt(record.getAttributes().getNamedItem("id").getNodeValue());
+                        long time = Long.parseLong(record.getAttributes().getNamedItem("time").getNodeValue());
+                        int x = Integer.parseInt(record.getAttributes().getNamedItem("x").getNodeValue());
+                        int y = Integer.parseInt(record.getAttributes().getNamedItem("y").getNodeValue());
+                        addRecord(RecordFactory.makeBulletMoveRecord(time, id, x, y));
+                        break;
+                    }
+                    case BULLET_REMOVE: {
+                        int id = Integer.parseInt(record.getAttributes().getNamedItem("id").getNodeValue());
+                        long time = Long.parseLong(record.getAttributes().getNamedItem("time").getNodeValue());
+                        addRecord(RecordFactory.makeBulletRemoveRecord(time, id));
+                        break;
+                    }
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -87,6 +151,7 @@ public class RecordsManager {
                     recordNode.setAttribute("creature", record.creature.getClass().getName());
                     recordNode.setAttribute("positionX", String.valueOf(record.positionX));
                     recordNode.setAttribute("positionY", String.valueOf(record.positionY));
+                    recordNode.setAttribute("src", record.src);
                     break;
                 }
                 case MOVE: {
