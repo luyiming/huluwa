@@ -14,11 +14,12 @@ public final class Ground extends JFrame {
     }
 
     public void InitUI() {
-        Field field = new Field();
+        Board board = new Board();
+        Field field = new Field(board);
         field.setPreferredSize(new Dimension(field.getBoardWidth(), field.getBoardHeight()));
-        add(field);
 
-        add(BorderLayout.EAST, new Board());
+        add(field);
+        add(BorderLayout.EAST, board);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(field.getBoardWidth() + OFFSET + 200,

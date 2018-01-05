@@ -3,6 +3,8 @@ package nju.java;
 import nju.java.bullet.Bullet;
 import nju.java.bullet.BulletsManager;
 import nju.java.creature.*;
+import nju.java.record.RecordFactory;
+import nju.java.record.RecordsManager;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -25,6 +27,7 @@ public class Field extends JPanel {
     private YeYe yeye;
     private Background background;
     private BulletsManager bulletsManager;
+    private RecordsManager recordsManager;
 
     private Position[][] positions;
 
@@ -32,9 +35,14 @@ public class Field extends JPanel {
     private boolean huluwaWin = true;
     private boolean minionWin = true;
 
+    private long startTime;
+
+    private Board board;
+
     ArrayList<Thread> threads = new ArrayList<Thread>();
 
-    public Field() {
+    public Field(Board board) {
+        this.board = board;
 
         addKeyListener(new TAdapter());
         setFocusable(true);
@@ -60,6 +68,10 @@ public class Field extends JPanel {
 
     public synchronized BulletsManager getBulletsManager() { return bulletsManager; }
 
+    public synchronized RecordsManager getRecordsManager() {
+        return recordsManager;
+    }
+
     public int convertPositionToX(Position position) { return position.getX() * SPACE + OFFSET; }
     public int convertPositionToX(int x) { return x * SPACE + OFFSET; }
 
@@ -75,6 +87,7 @@ public class Field extends JPanel {
         background = new Background(0, 0);
 
         bulletsManager = new BulletsManager(this);
+        recordsManager = new RecordsManager(this);
 
         positions = new Position[ROW][COL];
         for (int i = 0; i < ROW; i++) {
@@ -89,31 +102,36 @@ public class Field extends JPanel {
                     Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet" + (i+1) + ".png");
             huluwas[i].setPosition(positions[2][i]);
             positions[2][i].setCreature(huluwas[i]);
+            recordsManager.addRecord(RecordFactory.makeCreateRecord(huluwas[i].getId(), huluwas[i]));
         }
 
         yeye = new YeYe(this, Creature.SPEED_LOW, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_LOW,
                 Creature.ATTACK_RANGE_FAR, 2, "bullet0.png");
         yeye.setPosition(positions[0][0]);
         positions[0][0].setCreature(yeye);
+        recordsManager.addRecord(RecordFactory.makeCreateRecord(yeye.getId(), yeye));
 
-        minions = new Minion[7];
+        minions = new Minion[5];
         for (int i = 0; i < minions.length; i++) {
             minions[i] = new Minion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN,
                     Creature.DAMAGE_MEDIAN, Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
             minions[i].setPosition(positions[7][i]);
             positions[7][i].setCreature(minions[i]);
+            recordsManager.addRecord(RecordFactory.makeCreateRecord(minions[i].getId(), minions[i]));
         }
 
         xiezijing = new Scorpion(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN,
                 Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
         xiezijing.setPosition(positions[9][5]);
         positions[9][5].setCreature(xiezijing);
+        recordsManager.addRecord(RecordFactory.makeCreateRecord(xiezijing.getId(), xiezijing));
 
         snake = new Snake(this, Creature.SPEED_MEDIAN, Creature.BULLET_SPEED_MEDIAN, Creature.DAMAGE_MEDIAN,
                 Creature.ATTACK_RANGE_MEDIAN, 1, "bullet8.png");
         snake.setHealth(0.6);
         snake.setPosition(positions[9][4]);
         positions[9][4].setCreature(snake);
+        recordsManager.addRecord(RecordFactory.makeCreateRecord(snake.getId(), snake));
 
     }
 
@@ -152,7 +170,9 @@ public class Field extends JPanel {
                 g.drawImage(item.getImage(), item.x(), item.y(), this);
             }
 
-            scoreRecord();
+            if (!completed) {
+                scoreRecord();
+            }
 
             if (completed) {
                 g.setColor(new Color(0, 0, 0));
@@ -194,6 +214,7 @@ public class Field extends JPanel {
                 yeye.move(0, 1);
             } else if (key == KeyEvent.VK_S) {
                 Field.this.threads.clear();
+                Field.this.startTime = System.currentTimeMillis();
 
                 Field.this.threads.add(new Thread(yeye));
                 for (Huluwa huluwa : huluwas)
@@ -209,6 +230,10 @@ public class Field extends JPanel {
                 restartLevel();
             } else if (key == KeyEvent.VK_C) {
                 completed = true;
+            } else if (key == KeyEvent.VK_X) {
+//                new RecordsManager().parse("D:\\Projects\\huluwa\\sample.xml");
+            } else if (key == KeyEvent.VK_O) {
+//                new RecordsManager().exportToFile("C:\\Users\\luyim\\Desktop\\sample.xml");
             }
 
             repaint();
@@ -246,8 +271,17 @@ public class Field extends JPanel {
             for (Thread thread : threads) {
                 thread.interrupt();
             }
-
+            System.out.println("completed");
+            this.recordsManager.exportToFile("C:\\Users\\luyim\\Desktop\\sample.xml");
         }
+    }
+
+    public long getTime() {
+        return System.currentTimeMillis() - this.startTime;
+    }
+
+    public void addToBoard(String msg) {
+        this.board.addItem(msg);
     }
 
     public void restartLevel() {

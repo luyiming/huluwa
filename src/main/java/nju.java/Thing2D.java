@@ -10,9 +10,14 @@ public class Thing2D {
     private int y;
     private Image image;
 
+    private static int id = 0;
+
+    private int uid;
+
     public Thing2D(int x, int y) {
         this.x = x;
         this.y = y;
+        uid = id++;
     }
 
     public Image getImage() {
@@ -45,5 +50,13 @@ public class Thing2D {
 
     public int getHeight() {
         return image.getHeight(null);
+    }
+
+    public int getId() {
+        return uid;
+    }
+
+    public static void resetId() {
+        id = 0;
     }
 } 

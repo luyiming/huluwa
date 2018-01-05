@@ -18,6 +18,7 @@ public class Bullet extends Thing2D {
     private double speed;
     private double damage;
     private Creature creature;
+    private String bulletFilePath;
 
     public static final double SPEED_HIGH = 0.6;
     public static final double SPEED_MEDIAN = 0.4;
@@ -33,6 +34,7 @@ public class Bullet extends Thing2D {
         this.speed = speed;
         this.damage = damage;
         this.creature = creature;
+        this.bulletFilePath = bulletFilePath;
 
         URL loc = this.getClass().getClassLoader().getResource(bulletFilePath);
         ImageIcon iia = new ImageIcon(loc);
@@ -78,4 +80,6 @@ public class Bullet extends Thing2D {
     public Creature getCreature() {
         return creature;
     }
+
+    public String getSrc() { return bulletFilePath; }
 }

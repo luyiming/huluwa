@@ -13,9 +13,9 @@ public class Board extends JPanel {
 
     public Board() {
         listModel = new DefaultListModel();
-        listModel.addElement("Jane Doe");
-        listModel.addElement("John Smith");
-        listModel.addElement("Kathy Green");
+//        listModel.addElement("Jane Doe");
+//        listModel.addElement("John Smith");
+//        listModel.addElement("Kathy Green");
 
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -36,6 +36,14 @@ public class Board extends JPanel {
         setLayout(new BorderLayout());
         add(BorderLayout.NORTH, panel);
         add(listScroller);
+    }
+
+    public void clear() {
+        listModel.clear();
+    }
+
+    public synchronized void addItem(String msg) {
+        listModel.addElement(msg);
     }
 
     class RemoveButtonActionListener implements ActionListener {

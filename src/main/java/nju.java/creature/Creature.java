@@ -4,6 +4,7 @@ import nju.java.Field;
 import nju.java.Thing2D;
 import nju.java.Position;
 import nju.java.bullet.Bullet;
+import nju.java.record.RecordFactory;
 
 import java.util.Random;
 
@@ -59,10 +60,12 @@ public abstract class Creature extends Thing2D implements Runnable {
 
     public void hurt(double damage) {
         this.health -= damage;
+        this.field.getRecordsManager().addRecord(RecordFactory.makeHurtRecord(this.field.getTime(), this.getId(), this.health));
         if (this.health < 0) {
+            this.field.getRecordsManager().addRecord(RecordFactory.makeDeadRecord(this.field.getTime(), this.getId()));
             this.position.clearCreature();
             this.position = null;
-            System.out.println("creature dead");
+//            System.out.println("creature dead");
         }
     }
 
@@ -101,6 +104,8 @@ public abstract class Creature extends Thing2D implements Runnable {
     }
 
     public boolean move(int x, int y) {
+        if (isDead())
+            return false;
         int newX = position.getX() + x;
         int newY = position.getY() + y;
         if (field.inSpace(newX, newY)) {
@@ -108,6 +113,8 @@ public abstract class Creature extends Thing2D implements Runnable {
                 field.getPositions()[position.getX()][position.getY()].clearCreature();
                 field.getPositions()[newX][newY].setCreature(this);
                 setPosition(field.getPositions()[newX][newY]);
+                this.field.getRecordsManager().addRecord(RecordFactory.makeMoveRecord(this.field.getTime(), this.getId(),
+                        this.field.convertPositionToX(newX), this.field.convertPositionToY(newY)));
                 return true;
             } else {
                 return false;

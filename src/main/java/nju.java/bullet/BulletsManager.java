@@ -1,6 +1,7 @@
 package nju.java.bullet;
 
 import nju.java.Field;
+import nju.java.record.RecordFactory;
 
 import java.util.*;
 
@@ -15,6 +16,7 @@ public class BulletsManager implements Runnable {
 
     public void addBullet(Bullet bullet) {
         bullets.add(bullet);
+        this.field.getRecordsManager().addRecord(RecordFactory.makeBulletCreateRecord(this.field.getTime(), bullet.getId(), bullet.x(), bullet.y(), bullet.getAngle(), bullet.getSrc()));
     }
 
     public LinkedList<Bullet> getBullets() {
@@ -26,8 +28,10 @@ public class BulletsManager implements Runnable {
             Bullet bullet = bullets.get(i);
             bullet.setX(bullet.x() + (int)Math.round(bullet.getSpeed() * updateInterval * Math.cos(bullet.getAngle())));
             bullet.setY(bullet.y() + (int)Math.round(bullet.getSpeed() * updateInterval * Math.sin(bullet.getAngle())));
+            this.field.getRecordsManager().addRecord(RecordFactory.makeBulletMoveRecord(this.field.getTime(), bullet.getId(), bullet.x(), bullet.y()));
             if (bullet.x() < 0 || bullet.x() > field.getBoardWidth() || bullet.y() < 0 || bullet.y() > field.getBoardHeight()) {
                 bullets.remove(i);
+                this.field.getRecordsManager().addRecord(RecordFactory.makeBulletRemoveRecord(this.field.getTime(), bullet.getId()));
 //                System.out.println("remove bullet");
                 continue;
             }
@@ -36,6 +40,7 @@ public class BulletsManager implements Runnable {
             if (this.field.inSpace(x, y) && this.field.getPositions()[x][y].hasCreature() && bullet.getCreature().canAttack(this.field.getPositions()[x][y].getCreature())) {
                 this.field.getPositions()[x][y].getCreature().hurt(bullet.getDamage());
                 bullets.remove(i);
+                this.field.getRecordsManager().addRecord(RecordFactory.makeBulletRemoveRecord(this.field.getTime(), bullet.getId()));
 //                System.out.println("remove bullet");
                 continue;
             }
