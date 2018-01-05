@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <records>
-<record creature="nju.java.creature.Huluwa" id="1" positionX="2" positionY="0" src="1.png" type="CREATE"/>
-<record creature="nju.java.creature.Huluwa" id="2" positionX="2" positionY="1" src="2.png" type="CREATE"/>
-<record creature="nju.java.creature.Huluwa" id="3" positionX="2" positionY="2" src="3.png" type="CREATE"/>
-<record creature="nju.java.creature.Huluwa" id="4" positionX="2" positionY="3" src="4.png" type="CREATE"/>
-<record creature="nju.java.creature.Huluwa" id="5" positionX="2" positionY="4" src="5.png" type="CREATE"/>
-<record creature="nju.java.creature.Huluwa" id="6" positionX="2" positionY="5" src="6.png" type="CREATE"/>
-<record creature="nju.java.creature.Huluwa" id="7" positionX="2" positionY="6" src="7.png" type="CREATE"/>
-<record creature="nju.java.creature.YeYe" id="8" positionX="0" positionY="0" src="yeye.png" type="CREATE"/>
-<record creature="nju.java.creature.Minion" id="9" positionX="7" positionY="0" src="hamajing.png" type="CREATE"/>
-<record creature="nju.java.creature.Minion" id="10" positionX="7" positionY="1" src="hamajing.png" type="CREATE"/>
-<record creature="nju.java.creature.Minion" id="11" positionX="7" positionY="2" src="hamajing.png" type="CREATE"/>
-<record creature="nju.java.creature.Minion" id="12" positionX="7" positionY="3" src="hamajing.png" type="CREATE"/>
-<record creature="nju.java.creature.Minion" id="13" positionX="7" positionY="4" src="hamajing.png" type="CREATE"/>
-<record creature="nju.java.creature.Scorpion" id="14" positionX="9" positionY="5" src="xiezijing.png" type="CREATE"/>
-<record creature="nju.java.creature.Snake" id="15" positionX="9" positionY="4" src="shejing1.png" type="CREATE"/>
+<record creature="Huluwa" id="1" positionX="2" positionY="0" src="1.png" type="CREATE"/>
+<record creature="Huluwa" id="2" positionX="2" positionY="1" src="2.png" type="CREATE"/>
+<record creature="Huluwa" id="3" positionX="2" positionY="2" src="3.png" type="CREATE"/>
+<record creature="Huluwa" id="4" positionX="2" positionY="3" src="4.png" type="CREATE"/>
+<record creature="Huluwa" id="5" positionX="2" positionY="4" src="5.png" type="CREATE"/>
+<record creature="Huluwa" id="6" positionX="2" positionY="5" src="6.png" type="CREATE"/>
+<record creature="Huluwa" id="7" positionX="2" positionY="6" src="7.png" type="CREATE"/>
+<record creature="YeYe" id="8" positionX="0" positionY="0" src="yeye.png" type="CREATE"/>
+<record creature="Minion" id="9" positionX="7" positionY="0" src="hamajing.png" type="CREATE"/>
+<record creature="Minion" id="10" positionX="7" positionY="1" src="hamajing.png" type="CREATE"/>
+<record creature="Minion" id="11" positionX="7" positionY="2" src="hamajing.png" type="CREATE"/>
+<record creature="Minion" id="12" positionX="7" positionY="3" src="hamajing.png" type="CREATE"/>
+<record creature="Minion" id="13" positionX="7" positionY="4" src="hamajing.png" type="CREATE"/>
+<record creature="Scorpion" id="14" positionX="9" positionY="5" src="xiezijing.png" type="CREATE"/>
+<record creature="Snake" id="15" positionX="9" positionY="4" src="shejing1.png" type="CREATE"/>
 <record id="14" time="9" type="MOVE" x="680" y="470"/>
 <record id="10" time="9" type="MOVE" x="470" y="120"/>
 <record id="5" time="9" type="MOVE" x="120" y="330"/>
