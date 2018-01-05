@@ -8,30 +8,46 @@ public class Board extends JPanel {
 
     private JList list;
     private DefaultListModel listModel;
-    private JButton addButton;
-    JButton removeButton;
+    private JButton startButton;
+    private JButton saveButton;
+    private JButton openButton;
+    private MainFrame ground;
 
-    public Board() {
+    public Board(MainFrame ground) {
+        this.ground = ground;
+
+        startButton = new JButton("开始战斗");
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Board.this.ground.field.startBattle();
+            }
+        });
+
+        saveButton = new JButton("保存记录");
+        saveButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Board.this.ground.field.saveRecord();
+            }
+        });
+
+        openButton = new JButton("回放记录");
+        openButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Board.this.ground.field.playRecord();
+            }
+        });
+
         listModel = new DefaultListModel();
-//        listModel.addElement("Jane Doe");
-//        listModel.addElement("John Smith");
-//        listModel.addElement("Kathy Green");
-
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        list.setVisibleRowCount(-1);
         JScrollPane listScroller = new JScrollPane(list);
 
-        addButton = new JButton("add");
-        addButton.addActionListener(new AddButtonActionListener());
-
-        removeButton = new JButton("remove");
-        removeButton.addActionListener(new RemoveButtonActionListener());
-
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.add(BorderLayout.WEST, addButton);
-        panel.add(BorderLayout.EAST, removeButton);
+        panel.setPreferredSize(new Dimension(270, 35));
+        panel.setLayout(new GridLayout(1, 3));
+        panel.add(startButton);
+        panel.add(saveButton);
+        panel.add(openButton);
 
         setLayout(new BorderLayout());
         add(BorderLayout.NORTH, panel);
@@ -46,60 +62,16 @@ public class Board extends JPanel {
         listModel.addElement(msg);
     }
 
-    class RemoveButtonActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            int index = list.getSelectedIndex();
-            listModel.remove(index);
-
-            int size = listModel.getSize();
-
-            if (size == 0) { //Nobody's left, disable firing.
-                removeButton.setEnabled(false);
-
-            } else { //Select an index.
-                if (index == listModel.getSize()) {
-                    //removed item in last position
-                    index--;
-                }
-
-                list.setSelectedIndex(index);
-                list.ensureIndexIsVisible(index);
-            }
-        }
+    public void setStartButtonEnabled(boolean enable) {
+        startButton.setEnabled(enable);
     }
 
-    class AddButtonActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-//            String name = employeeName.getText();
-//
-//            //User did not type in a unique name...
-//            if (name.equals("") || alreadyInList(name)) {
-//                Toolkit.getDefaultToolkit().beep();
-//                employeeName.requestFocusInWindow();
-//                employeeName.selectAll();
-//                return;
-//            }
-
-            int index = list.getSelectedIndex(); //get selected index
-            if (index == -1) { //no selection, so insert at beginning
-                index = 0;
-            } else {           //add after the selected item
-                index++;
-            }
-
-//            listModel.insertElementAt("test", index);
-            listModel.addElement("test");
-
-//            //Reset the text field.
-//            employeeName.requestFocusInWindow();
-//            employeeName.setText("");
-
-            //Select the new item and make it visible.
-            list.setSelectedIndex(index);
-            list.ensureIndexIsVisible(index);
-        }
+    public void setSaveuttonEnabled(boolean enable) {
+        saveButton.setEnabled(enable);
     }
 
-
+    public void setOpenButtonEnabled(boolean enable) {
+        openButton.setEnabled(enable);
+    }
 
 }

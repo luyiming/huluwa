@@ -44,11 +44,13 @@ public class Field extends JPanel {
     private long startTime;
 
     private Board board;
+    private MainFrame ground;
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
 
-    public Field(Board board) {
+    public Field(Board board, MainFrame ground) {
         this.board = board;
+        this.ground = ground;
 
         addKeyListener(new TAdapter());
         setFocusable(true);
@@ -147,7 +149,7 @@ public class Field extends JPanel {
 
     public void buildWorld(Graphics g) {
 
-        g.setColor(new Color(250, 240, 170));
+        g.setColor(new Color(207, 240, 160));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         ArrayList<Thing2D> world = new ArrayList<Thing2D>();
@@ -215,51 +217,13 @@ public class Field extends JPanel {
 
             int key = e.getKeyCode();
 
-            if (!running) {
+            if (!running && !replayMode) {
                 if (key == KeyEvent.VK_S) {
-                    if (Field.this.getRecordsManager().isEmpty()) {
-                        JOptionPane.showMessageDialog(Field.this, "Current record is empty.");
-                    } else {
-                        JFileChooser saveFile = new JFileChooser(".");
-                        int result = saveFile.showSaveDialog(null);
-                        if (result == JFileChooser.APPROVE_OPTION) {
-                            File targetFile = saveFile.getSelectedFile();
-                            System.out.println(targetFile.getAbsolutePath());
-
-                            Field.this.getRecordsManager().exportToFile(targetFile.getAbsolutePath());
-                        }
-                    }
-                } else if (key == KeyEvent.VK_R) {
-                    JFileChooser openFile = new JFileChooser(".");
-                    int result = openFile.showOpenDialog(null);
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        File targetFile = openFile.getSelectedFile();
-                        System.out.println(targetFile.getAbsolutePath());
-
-                        RecordPlayer recordPlayer = new RecordPlayer(Field.this);
-                        Field.this.getRecordsManager().loadRecordsFile(targetFile.getAbsolutePath(), recordPlayer);
-                        Field.this.board.clear();
-                        new Thread(recordPlayer).start();
-                    }
+                    saveRecord();
+                } else if (key == KeyEvent.VK_P) {
+                    playRecord();
                 } else if (key == KeyEvent.VK_SPACE) {
-                    Field.this.threads.clear();
-                    restartLevel();
-                    running = true;
-
-                    Field.this.threads.add(new Thread(yeye));
-                    for (Huluwa huluwa : huluwas)
-                        Field.this.threads.add(new Thread(huluwa));
-                    for (Minion minion : minions)
-                        Field.this.threads.add(new Thread(minion));
-                    Field.this.threads.add(new Thread(xiezijing));
-                    Field.this.threads.add(new Thread(snake));
-                    Field.this.threads.add(new Thread(bulletsManager));
-
-                    Field.this.startTime = System.currentTimeMillis();
-                    for (Thread thread : Field.this.threads)
-                        thread.start();
-                } else if (key == KeyEvent.VK_R) {
-                    restartLevel();
+                    startBattle();
                 }
             } else {
                 if (key == KeyEvent.VK_LEFT) {
@@ -310,6 +274,9 @@ public class Field extends JPanel {
                 thread.interrupt();
             }
             System.out.println("completed");
+            this.ground.board.setStartButtonEnabled(true);
+            this.ground.board.setSaveuttonEnabled(true);
+            this.ground.board.setOpenButtonEnabled(true);
         }
     }
 
@@ -332,15 +299,75 @@ public class Field extends JPanel {
     }
 
     public void startReplay(ArrayList<Creature> creatures, ArrayList<Bullet> bullets) {
+        this.huluwaWin = false;
+        this.minionWin = false;
         this.replayBullets = bullets;
         this.replayCreatures = creatures;
         this.replayMode = true;
+        this.ground.board.setStartButtonEnabled(false);
+        this.ground.board.setSaveuttonEnabled(false);
+        this.ground.board.setOpenButtonEnabled(false);
     }
 
     public void stopReplay() {
         this.replayMode = false;
         this.replayBullets = null;
         this.replayCreatures = null;
+        this.ground.board.setStartButtonEnabled(true);
+        this.ground.board.setSaveuttonEnabled(true);
+        this.ground.board.setOpenButtonEnabled(true);
+    }
+
+    public void startBattle() {
+        requestFocus();
+        this.threads.clear();
+        restartLevel();
+        running = true;
+        this.ground.board.setStartButtonEnabled(false);
+        this.ground.board.setSaveuttonEnabled(false);
+        this.ground.board.setOpenButtonEnabled(false);
+
+        this.threads.add(new Thread(yeye));
+        for (Huluwa huluwa : huluwas)
+            this.threads.add(new Thread(huluwa));
+        for (Minion minion : minions)
+            this.threads.add(new Thread(minion));
+        this.threads.add(new Thread(xiezijing));
+        this.threads.add(new Thread(snake));
+        this.threads.add(new Thread(bulletsManager));
+
+        this.startTime = System.currentTimeMillis();
+        for (Thread thread : this.threads)
+            thread.start();
+    }
+
+    public void saveRecord() {
+        if (getRecordsManager().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Current records is empty.");
+        } else {
+            JFileChooser saveFile = new JFileChooser(".");
+            int result = saveFile.showSaveDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File targetFile = saveFile.getSelectedFile();
+                System.out.println(targetFile.getAbsolutePath());
+
+                getRecordsManager().exportToFile(targetFile.getAbsolutePath());
+            }
+        }
+    }
+
+    public void playRecord() {
+        JFileChooser openFile = new JFileChooser(".");
+        int result = openFile.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File targetFile = openFile.getSelectedFile();
+            System.out.println(targetFile.getAbsolutePath());
+
+            RecordPlayer recordPlayer = new RecordPlayer(this);
+            getRecordsManager().loadRecordsFile(targetFile.getAbsolutePath(), recordPlayer);
+            this.board.clear();
+            new Thread(recordPlayer).start();
+        }
     }
 
 }

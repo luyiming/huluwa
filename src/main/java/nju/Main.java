@@ -3,7 +3,7 @@ package nju;
 public class Main {
 
     public static void main(String[] args) {
-        Ground ground = new Ground();
+        MainFrame ground = new MainFrame();
         ground.setVisible(true);
     }
 }

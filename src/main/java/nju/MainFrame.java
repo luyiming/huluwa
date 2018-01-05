@@ -5,26 +5,29 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public final class Ground extends JFrame {
+public final class MainFrame extends JFrame {
 
     private final int OFFSET = 50;
 
-    public Ground() {
+    public MainFrame() {
         InitUI();
     }
 
+    public Board board;
+    public Field field;
+
     public void InitUI() {
-        Board board = new Board();
-        Field field = new Field(board);
+        board = new Board(this);
+        field = new Field(board, this);
         field.setPreferredSize(new Dimension(field.getBoardWidth(), field.getBoardHeight()));
 
         add(field);
         add(BorderLayout.EAST, board);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(field.getBoardWidth() + OFFSET + 200,
+        setSize(field.getBoardWidth() + OFFSET + board.getPreferredSize().width,
                 field.getBoardHeight() + 2 * OFFSET);
         setLocationRelativeTo(null);
-        setTitle("Ground");
+        setTitle("MainFrame");
     }
 }
