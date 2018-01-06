@@ -74,4 +74,4 @@ P.S. 虽然 XML 规范推荐用子节点（sub-node）而不是属性（attribut
 为 `class RecordsManager` 添加了单元测试，这是我写的时候最容易出错的一部分，游戏中每一个实体用一个全局的 `uid` 来标示，为了保证回放的正确性，必须保证在记录保存和加载的过程中，`uid` 和物体一一对应。
 
 #### 2. 持续测试（CI）
-添加了集成测试环境 [Travis CI](https://travis-ci.org/)
+添加了持续测试环境 [Travis CI](https://travis-ci.org/)
