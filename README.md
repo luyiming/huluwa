@@ -68,3 +68,10 @@ P.S. 虽然 XML 规范推荐用子节点（sub-node）而不是属性（attribut
 
 ### 模板方法（Template method pattern）
 所有生物的基类 `class Creature` 拥有一套完整的行动逻辑，它会根据自身属性（移动速度，子弹数量，攻击力...），不断地进行移动或者攻击操作。其中 `doMove()` 和 `doAttach` 都是可被继承的模板方法。这样，每个子类只需要根据自身特点，重写 `doMove()` 和 `doAttach` 方法就可以进行个性化。
+
+### 测试
+#### 1. 单元测试（Unit Test）
+为 `class RecordsManager` 添加了单元测试，这是我写的时候最容易出错的一部分，游戏中每一个实体用一个全局的 `uid` 来标示，为了保证回放的正确性，必须保证在记录保存和加载的过程中，`uid` 和物体一一对应。
+
+#### 2. 持续测试（CI）
+添加了集成测试环境 [Travis CI](https://travis-ci.org/)
