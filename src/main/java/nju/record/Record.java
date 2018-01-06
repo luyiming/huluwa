@@ -29,4 +29,15 @@ public class Record {
                     x+", "+y+" health="+health + " angle="+angle + " src="+src;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Record))
+            return false;
+        Record record = (Record)obj;
+        return type.equals(record.type) && time == record.time && id == record.id && positionX == record.positionX &&
+                positionY == record.positionY && x == record.x && y == record.y
+                && health == record.health && angle == record.angle;
+    }
+
+
 }

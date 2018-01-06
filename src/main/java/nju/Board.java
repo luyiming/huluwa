@@ -6,13 +6,13 @@ import java.awt.event.*;
 
 public class Board extends JPanel {
 
-    private JList list;
     private DefaultListModel listModel;
     private JButton startButton;
     private JButton saveButton;
     private JButton openButton;
     private MainFrame ground;
 
+    @SuppressWarnings("unchecked")
     public Board(MainFrame ground) {
         this.ground = ground;
 
@@ -38,7 +38,7 @@ public class Board extends JPanel {
         });
 
         listModel = new DefaultListModel();
-        list = new JList(listModel);
+        JList list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane listScroller = new JScrollPane(list);
 
@@ -58,6 +58,7 @@ public class Board extends JPanel {
         listModel.clear();
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized void addItem(String msg) {
         listModel.addElement(msg);
     }
@@ -66,7 +67,7 @@ public class Board extends JPanel {
         startButton.setEnabled(enable);
     }
 
-    public void setSaveuttonEnabled(boolean enable) {
+    public void setSaveButtonEnabled(boolean enable) {
         saveButton.setEnabled(enable);
     }
 

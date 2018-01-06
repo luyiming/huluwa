@@ -31,7 +31,8 @@ public class RecordsManager {
         records.add(record);
         if (record.type == Record.RecordType.CREATE) {
             System.out.printf("%s created at (%d, %d)\n", record.creature.getClass().getSimpleName(), record.positionX, record.positionY);
-            this.field.addToBoard(String.format("%s created at (%d, %d)\n", record.creature.getClass().getSimpleName(), record.positionX, record.positionY));
+            if (this.field != null)
+                this.field.addToBoard(String.format("%s created at (%d, %d)\n", record.creature.getClass().getSimpleName(), record.positionX, record.positionY));
         }
 //        else if (record.type == Record.RecordType.MOVE) {
 //            System.out.printf("%d move to (%d, %d)\n", record.id, this.field.convertXtoPosition(record.x), this.field.convertYtoPosition(record.y));
@@ -41,7 +42,8 @@ public class RecordsManager {
 //            this.field.addToBoard(String.format("creature #%d hurt, health is %f\n", record.id, record.health));
         } else if (record.type == Record.RecordType.DEAD) {
             System.out.printf("creature #%d dead\n", record.id);
-            this.field.addToBoard(String.format("creature #%d dead\n", record.id));
+            if (this.field != null)
+                this.field.addToBoard(String.format("creature #%d dead\n", record.id));
         }
     }
 
@@ -67,8 +69,10 @@ public class RecordsManager {
                         int positionX = Integer.parseInt(record.getAttributes().getNamedItem("positionX").getNodeValue());
                         int positionY = Integer.parseInt(record.getAttributes().getNamedItem("positionY").getNodeValue());
                         Creature creature = new Creature(src);
-                        creature.setX(this.field.convertPositionToX(positionX));
-                        creature.setY(this.field.convertPositionToY(positionY));
+                        if (this.field != null) {
+                            creature.setX(this.field.convertPositionToX(positionX));
+                            creature.setY(this.field.convertPositionToY(positionY));
+                        }
                         creature.setId(id);
                         player.addCreature(creature, id);
                         addRecord(RecordFactory.makeCreateRecord(creature.getId(), creature, positionX, positionY));

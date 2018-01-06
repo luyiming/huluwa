@@ -275,7 +275,7 @@ public class Field extends JPanel {
             }
             System.out.println("completed");
             this.ground.board.setStartButtonEnabled(true);
-            this.ground.board.setSaveuttonEnabled(true);
+            this.ground.board.setSaveButtonEnabled(true);
             this.ground.board.setOpenButtonEnabled(true);
         }
     }
@@ -305,7 +305,7 @@ public class Field extends JPanel {
         this.replayCreatures = creatures;
         this.replayMode = true;
         this.ground.board.setStartButtonEnabled(false);
-        this.ground.board.setSaveuttonEnabled(false);
+        this.ground.board.setSaveButtonEnabled(false);
         this.ground.board.setOpenButtonEnabled(false);
     }
 
@@ -314,7 +314,7 @@ public class Field extends JPanel {
         this.replayBullets = null;
         this.replayCreatures = null;
         this.ground.board.setStartButtonEnabled(true);
-        this.ground.board.setSaveuttonEnabled(true);
+        this.ground.board.setSaveButtonEnabled(true);
         this.ground.board.setOpenButtonEnabled(true);
     }
 
@@ -324,7 +324,7 @@ public class Field extends JPanel {
         restartLevel();
         running = true;
         this.ground.board.setStartButtonEnabled(false);
-        this.ground.board.setSaveuttonEnabled(false);
+        this.ground.board.setSaveButtonEnabled(false);
         this.ground.board.setOpenButtonEnabled(false);
 
         this.threads.add(new Thread(yeye));
