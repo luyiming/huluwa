@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/luyiming/huluwa.svg?token=ZqSWSJNAyq6N8GY6iVps&branch=master)](https://travis-ci.com/luyiming/huluwa)
+
 # 葫芦娃大战蛇精
 
 A funny project for my **Java course**.
@@ -17,7 +19,10 @@ This project depends on:
 git clone https://github.com/luyiming/huluwa.git
 cd huluwa
 mvn package
+java -cp .\target\huluwa-1.0.jar nju.Main
 ```
+
+### **最精彩的记录在 `sample-records` 文件夹下**
 
 ## Background
 
