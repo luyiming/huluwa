@@ -101,7 +101,7 @@ public class Creature extends Thing2D implements Runnable {
 
     public void releasePosition() { position = null; }
 
-    public void randomMove() {
+    protected void doMove() {
         Random rand = new Random();
         int cnt = 0;
         boolean succeed = false;
@@ -173,7 +173,7 @@ public class Creature extends Thing2D implements Runnable {
                 return;
 
             if (rand.nextInt(2) == 0)
-                this.randomMove();
+                this.doMove();
             else
                 this.doAttack();
             try {
